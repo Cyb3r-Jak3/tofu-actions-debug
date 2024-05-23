@@ -29,14 +29,15 @@ jobs:
 
     - uses: hashicorp/setup-terraform@v3
 
-    - name: OpenTofu Init
-      run: tofu init && terraform init
+    # - name: OpenTofu Init
+    #   run: tofu init && terraform init
 
     - name: Terraform Plan
       id: tf-plan
       run: |
+        terraform init -upgrade
         export tf_exitcode=0
-        tofu plan -no-color -detailed-exitcode -input=false -out tfplan.tfplan || tf_exitcode=$?
+        terraform plan -no-color -detailed-exitcode -input=false -out tfplan.tfplan || tf_exitcode=$?
         echo "tf_exitcode=$tf_exitcode"
         if [[ $tf_exitcode -eq 2 ]]; then
           exit 0
@@ -48,6 +49,7 @@ jobs:
     - name: OpenTofu Plan
       id: plan
       run: |
+        tofu init -upgrade
         export tf_exitcode=0
         tofu plan -no-color -detailed-exitcode -input=false -out plan.tfplan
         echo "tf_exitcode=$?"
