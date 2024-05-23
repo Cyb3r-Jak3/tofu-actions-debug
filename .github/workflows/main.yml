@@ -26,12 +26,25 @@ jobs:
 
     - name: Setup OpenTofu
       uses: opentofu/setup-opentofu@v1
-      with:
-        tofu_version: 1.7.1
+
+    - uses: hashicorp/setup-terraform@v3
 
     - name: OpenTofu Init
-      run: tofu init
+      run: tofu init && terraform init
 
+    - name: Terraform Plan
+      id: tf-plan
+      run: |
+        export tf_exitcode=0
+        tofu plan -no-color -detailed-exitcode -input=false -out tfplan.tfplan || tf_exitcode=$?
+        echo "tf_exitcode=$tf_exitcode"
+        if [[ $tf_exitcode -eq 2 ]]; then
+          exit 0
+        elif [[ $tf_exitcode -eq 0 ]]; then
+          exit 0
+        else
+          exit $tf_exitcode
+        fi
     - name: OpenTofu Plan
       id: plan
       run: |
@@ -44,10 +57,10 @@ jobs:
         echo "tf_exitcode=$tf_exitcode" >> $GITHUB_OUTPUT
         
 
-        echo "~~~ $(tofu show -no-color ./plan.tfplan) ~~~" >> $GITHUB_STEP_SUMMARY
-        echo "plan<<EOF" >> $GITHUB_OUTPUT
-        echo "$(tofu show -no-color ./plan.tfplan)" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        # echo "~~~ $(tofu show -no-color ./plan.tfplan) ~~~" >> $GITHUB_STEP_SUMMARY
+        # echo "plan<<EOF" >> $GITHUB_OUTPUT
+        # echo "$(tofu show -no-color ./plan.tfplan)" >> $GITHUB_OUTPUT
+        # echo "EOF" >> $GITHUB_OUTPUT
 
         if [[ $tf_exitcode -eq 2 ]]; then
           echo "ADD_TO_PR=true" >> $GITHUB_ENV
