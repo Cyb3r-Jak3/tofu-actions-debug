@@ -36,7 +36,8 @@ jobs:
       id: plan
       run: |
         export tf_exitcode=0
-        tofu plan -no-color -detailed-exitcode -input=false -out plan.tfplan || echo "exit code: $?"
+        tofu plan -no-color -detailed-exitcode -input=false -out plan.tfplan
+        echo "tf_exitcode=$?"
         tofu plan -no-color -detailed-exitcode -input=false -out plan.tfplan
         tf_exitcode=$?
         echo "tf_exitcode=$tf_exitcode"
