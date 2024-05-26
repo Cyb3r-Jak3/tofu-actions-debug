@@ -37,7 +37,7 @@ jobs:
         export tf_exitcode=0
         tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan || export tf_exitcode=$?
         echo "$tf_exitcode"
-        echo "tf_exitcode=$tf_exitcode" >> $GITHUB_OUTPUT
+        echo "tf_exitcode=2" >> $GITHUB_OUTPUT
         ls -l
         
 
