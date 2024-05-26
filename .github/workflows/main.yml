@@ -38,6 +38,7 @@ jobs:
         tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan || export tf_exitcode=$?
         echo "$tf_exitcode"
         echo "tf_exitcode=$tf_exitcode" >> $GITHUB_OUTPUT
+        ls -l
         
 
         # echo "~~~ $(tofu show -no-color ./plan.tfplan) ~~~" >> $GITHUB_STEP_SUMMARY
@@ -114,7 +115,7 @@ jobs:
         run: |
           set -o pipefail
           tofu init
-          tofu apply -input=false -no-color -parallelism=1 plan.tfplan/plan.tfplan | tee apply.txt
+          tofu apply -input=false -no-color plan.tfplan/plan.tfplan | tee apply.txt
           export tf_exitcode=$?
           echo "tf_exitcode=$tf_exitcode" >> $GITHUB_OUTPUT
 
