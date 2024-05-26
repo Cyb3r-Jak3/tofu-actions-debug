@@ -29,33 +29,14 @@ jobs:
 
     - uses: hashicorp/setup-terraform@v3
 
-    # - name: OpenTofu Init
-    #   run: tofu init && terraform init
 
-    - name: Terraform Plan
-      id: tf-plan
-      run: |
-        terraform init -upgrade
-        export tf_exitcode=0
-        terraform plan -no-color -detailed-exitcode -input=false -out tfplan.tfplan || tf_exitcode=$?
-        echo "tf_exitcode=$tf_exitcode"
-        if [[ $tf_exitcode -eq 2 ]]; then
-          exit 0
-        elif [[ $tf_exitcode -eq 0 ]]; then
-          exit 0
-        else
-          exit $tf_exitcode
-        fi
     - name: OpenTofu Plan
       id: plan
       run: |
-        tofu init -upgrade
+        tofu init
         export tf_exitcode=0
-        tofu plan -no-color -detailed-exitcode -input=false -out plan.tfplan
-        echo "tf_exitcode=$?"
-        tofu plan -no-color -detailed-exitcode -input=false -out plan.tfplan
-        tf_exitcode=$?
-        echo "tf_exitcode=$tf_exitcode"
+        tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan || export tf_exitcode=$?
+        echo "$tf_exitcode"
         echo "tf_exitcode=$tf_exitcode" >> $GITHUB_OUTPUT
         
 
