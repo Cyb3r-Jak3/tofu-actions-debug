@@ -34,11 +34,12 @@ jobs:
       id: plan
       run: |
         tofu init
-        case $(tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan) in
-          0) export tf_exitcode=0 && echo "No changes detected" ;;
-          2) export tf_exitcode=2 && echo "Changes detected" ;;
-          *) export tf_exitcode=1 && echo "Error running plan" ;;
-        esac
+        tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan
+        # case $(tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan) in
+        #   0) export tf_exitcode=0 && echo "No changes detected" ;;
+        #   2) export tf_exitcode=2 && echo "Changes detected" ;;
+        #   *) export tf_exitcode=1 && echo "Error running plan" ;;
+        # esac
         
         echo "tf_exitcode=$tf_exitcode" >> "$GITHUB_OUTPUT"
 
