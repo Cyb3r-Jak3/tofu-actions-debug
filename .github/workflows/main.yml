@@ -33,6 +33,7 @@ jobs:
     - name: OpenTofu Plan
       id: plan
       run: |
+        set -o pipefail
         tofu init
         tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan || tf_exitcode=$?
         # case $(tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan) in
