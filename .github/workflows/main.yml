@@ -34,7 +34,7 @@ jobs:
       id: plan
       run: |
         tofu init
-        tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan
+        tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan || tf_exitcode=$?
         # case $(tofu plan -detailed-exitcode -input=false -no-color -out plan.tfplan) in
         #   0) export tf_exitcode=0 && echo "No changes detected" ;;
         #   2) export tf_exitcode=2 && echo "Changes detected" ;;
