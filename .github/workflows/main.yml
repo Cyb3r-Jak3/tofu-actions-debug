@@ -26,8 +26,8 @@ jobs:
 
     - name: Setup OpenTofu
       uses: opentofu/setup-opentofu@v1
-
-    - uses: hashicorp/setup-terraform@v3
+      with:
+        tofu_version: 1.8.0
 
 
     - name: OpenTofu Plan
@@ -110,7 +110,7 @@ jobs:
       - name: Setup OpenTofu
         uses: opentofu/setup-opentofu@v1
         with:
-          tofu_version: 1.7.1
+          tofu_version: 1.8.0
 
       - name: Tofu Apply
         run: |
